@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class Handler implements URLHandler {
     // The one bit of state on the server: a number that will be manipulated by
@@ -9,20 +10,19 @@ class Handler implements URLHandler {
 
     public String handleRequest(URI url) {
         if (url.getPath().equals("/")) {
-            return s.toString();
+            String list = Arrays.toString(s.toArray()).replace("[", "").replace("]", "");
+            return list;
         } 
+
         else if (url.getPath().contains("/add")) {
-            
             String[] parameters = url.getQuery().split("=");
             if (parameters[0].equals("s")) {
                 s.add(parameters[1]);
                 return "";
             }
-
+            return "addError";
         }
-        //Search 
-         else {
-    
+        else {
             System.out.println("Path: " + url.getPath());
             if (url.getPath().contains("search")) {
                 String[] parameters = url.getQuery().split("=");
@@ -39,10 +39,10 @@ class Handler implements URLHandler {
                     else 
                         return s1.substring(0,(s1.length() - 4));
                 }
+                return "sError";
             }
             return "404 Not Found!";
         }
-        return "";
     }
 }
 
